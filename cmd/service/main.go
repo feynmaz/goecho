@@ -4,11 +4,13 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+
+	"github.com/feynmaz/goecho/handlers"
 )
 
 func main() {
 	e := echo.New()
-	e.GET("/", index)
+	e.GET("/healthcheck", handlers.HealthCheck)
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
