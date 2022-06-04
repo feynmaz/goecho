@@ -1,15 +1,19 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+)
 
 func main() {
-	http.Handle("/", new(myHandler))
-	http.ListenAndServe(":8080", nil)
+	e := echo.New()
+	e.GET("/", index)
+	e.Logger.Fatal(e.Start(":8080"))
 }
 
-type myHandler struct{}
-
-func (h *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Hello, World!"))
+func index(ctx echo.Context) error {
+	// w.WriteHeader(http.StatusOK)
+	// w.Write([]byte("Hello, World!"))
+	return ctx.String(http.StatusOK, "Hello, World!")
 }
