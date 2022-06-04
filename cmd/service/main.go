@@ -13,7 +13,5 @@ func main() {
 }
 
 func index(ctx echo.Context) error {
-	// w.WriteHeader(http.StatusOK)
-	// w.Write([]byte("Hello, World!"))
 	return ctx.String(http.StatusOK, "Hello, World!")
 }
