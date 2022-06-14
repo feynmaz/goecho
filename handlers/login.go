@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/feynmaz/goecho/bindings"
-	"github.com/feynmaz/goecho/models"
-	"github.com/feynmaz/goecho/renderings"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/feynmaz/goecho/bindings"
+	"github.com/feynmaz/goecho/models"
+	"github.com/feynmaz/goecho/renderings"
 )
 
 // Login Handler will take a username and password from the request
@@ -41,8 +42,8 @@ func Login(ctx echo.Context) error {
 		return ctx.JSON(http.StatusUnauthorized, response)
 	}
 
-	if err := bcrypt.CompareHashAndPassword(
-		user.PasswordHash, []byte(loginRequest.Password)); err != nil {
+	err = bcrypt.CompareHashAndPassword(user.PasswordHash, []byte(loginRequest.Password)) 
+	if err != nil {
 		response.Success = false
 		response.Message = "Username or Password is incorrect"
 		return ctx.JSON(http.StatusUnauthorized, response)

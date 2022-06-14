@@ -28,7 +28,7 @@ func GetUserByUsername(db *sql.DB, username string) (User, error) {
 
 	for rows.Next() {
 		if err := rows.Scan(&user.ID, &user.Username, &user.PasswordHash); err != nil {
-			return user, errors.Wrapf(err, "database scan error: ")
+			return user, errors.Wrap(err, "database scan error: ")
 		}
 	}
 	if err := rows.Err(); err != nil {
