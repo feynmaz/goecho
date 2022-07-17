@@ -5,12 +5,12 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
-	uuid "github.com/satori/go.uuid"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/feynmaz/goecho/handlers"
+	"github.com/feynmaz/goecho/middlewares"
 	"github.com/feynmaz/goecho/models"
 )
 
@@ -19,22 +19,13 @@ func main() {
 
 	// Signing Key for the auth middleware
 	var signingKey = []byte("secret")
+	e.Pre(middlewares.RequestIDMiddleware)
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set(models.SigningContextKey, signingKey)
 			return next(c)
 		}
 	})
-	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return echo.HandlerFunc(func(c echo.Context) error {
-			requestID := uuid.NewV4()
-			// c.Logger().Infof("RequestID: %s", requestID)
-			log.Printf("RequestID: %s", requestID)
-			c.Set(models.RequestIDContextKey, requestID)
-			return next(c)
-		})
-	})
-	e.Use(middleware.Logger())
 
 	// Add DB to context
 	db, err := sql.Open("sqlite3", "./service.db")
